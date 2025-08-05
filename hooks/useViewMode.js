@@ -1,15 +1,17 @@
+// hooks/useViewMode.js
 import { useState } from 'react';
 
-const modes = ['lyric', 'simple', 'staff', 'amis'];
-
-export default function useViewMode(initial = 'lyric') {
-  const [viewMode, setViewMode] = useState(initial);
-
+export default function useViewMode(initialMode = 'lyric') {
+  const [viewMode, setViewMode] = useState(initialMode);
+  
   const cycleMode = () => {
-    const currentIndex = modes.indexOf(viewMode);
-    const nextIndex = (currentIndex + 1) % modes.length;
-    setViewMode(modes[nextIndex]);
+    setViewMode(prev => {
+      if (prev === 'lyric') return 'staff';
+      if (prev === 'staff') return 'simp'; 
+      if (prev === 'simp') return 'amis';
+      return 'lyric';
+    });
   };
-
-  return { viewMode, setViewMode, cycleMode };
+  
+  return { viewMode, cycleMode };
 }
